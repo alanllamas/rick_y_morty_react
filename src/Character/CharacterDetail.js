@@ -1,47 +1,58 @@
 import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom';
+
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+
+
 import  axios  from "axios";
 
+const mapStateToProps = state => {
+    // console.log('state: ', state);
+    
+    return {
+        characters: state.characters,
+        character: state.character
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {    
+    };
+}
 
 
 class CharacterDetail extends Component {
-    state = {
-        character : {},
-        run :true
-    }
+    componentDidMount(){
+        console.log('this.props.characters: ', this.props.characters);
+        console.log('this.props.characters: ', !this.props.characters);
+        console.log('this.props.characters: ', !!this.props.characters);
+        
+        console.log('this.props.characters: ', this.props.characters.results);
+        console.log('this.props.characters: ', !this.props.characters.results);
+        console.log('this.props.characters: ', !!this.props.characters.results);
+        
+        if(!this.props.characters.results){
+            this.props.history.push('/')
 
-    async getCharacter(){
-        const res = await axios.get(`https://rickandmortyapi.com/api/character/${this.id}`)
-
-        this.setState({
-            character: res.data
-        })
-    }
-    wrapper ( ){
-        if (this.state.run) {
-            this.path = this.props.location.pathname;
-            console.log(this.props.location);
-            
-            this.id = this.path.slice(this.path.indexOf('r/')+ 2, this.path.length);
-            this.getCharacter();
-            this.setState({run:false})
         }
     }
-    
+
     render() {
-        this.wrapper()
+        const {image,name,status,gender,species,type,url} = this.props.character
+    
         return (
             <>
                 {
-                    !!this.state.character ? 
+                    !!this.props.character ? 
                     (<div>
-                        <img src={this.state.character.image} alt=""/>
-                        <h4>{this.state.character.name}</h4>
-                        <p>{this.state.character.status}</p>
-                        <p>{this.state.character.gender}</p>
-                        <p>{this.state.character.species}</p>
-                        <p>{this.state.character.type}</p>
-                        <a>{this.state.character.url}</a>
+                        <img src={image} alt=""/>
+                        <h4>{name}</h4>
+                        <p>{status}</p>
+                        <p>{gender}</p>
+                        <p>{species}</p>
+                        <p>{type}</p>
+                        <a>{url}</a>
 
                     </div>) : ''
                 }
@@ -49,4 +60,8 @@ class CharacterDetail extends Component {
         )
     }
 }
-export default withRouter(CharacterDetail)
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(withRouter(CharacterDetail));

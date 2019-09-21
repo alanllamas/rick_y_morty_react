@@ -1,17 +1,21 @@
-import {
-    FETCH_CHARACTERS_SUCCESS,
-    FETCH_CHARACTERS_FAILED
-} from '../actions'
+import { combineReducers } from 'redux'
 
-const characterReducer = (state = {}, action) => {
-    switch (action.type) {
-        case FETCH_CHARACTERS_SUCCESS:
-            return action.payload
-        case FETCH_CHARACTERS_FAILED:
-            return action.payload
-        default:
-            return state
-    }
-}
+import charactersReducer from './charactersReducer'
+import characterReducer from './characterReducer';
 
-export default characterReducer
+export default combineReducers({
+    characters: charactersReducer,
+    character: characterReducer
+})
+
+
+
+
+
+
+
+
+
+
+
+
